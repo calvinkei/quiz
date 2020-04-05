@@ -10,7 +10,7 @@ import Button from '@material-ui/core/Button'
 import { makeStyles } from '@material-ui/core/styles'
 
 import { ApiUrl, NoOfQuestions, Answers } from './misc/constants'
-import { getRandomAnswers, getCorrectAnswer, replaceItemInArray } from './misc/utils'
+import { getRandomAnswers, getCorrectAnswer, replaceItemInArray, getScores } from './misc/utils'
 import AnswerButton from './components/AnswerButton'
 import Stepper from './components/Stepper'
 
@@ -46,18 +46,14 @@ const App = () => {
   const [answers, setAnswers] = React.useState(times(NoOfQuestions).map((i) => null))
   const [submitted, setSubmitted] = React.useState(false)
 
+  const score = React.useMemo(() => getScores(questions, answers), [questions, answers])
+
   const onAnswerClick = React.useCallback(
     (ans) => {
       setAnswers(replaceItemInArray(ans, currentQuestionNo, answers))
     },
     [setAnswers, currentQuestionNo, answers]
   )
-
-  const score = React.useMemo(() => {
-    return questions
-      .map((q, i) => getCorrectAnswer(q) === answers[i])
-      .reduce((acc, cur) => acc + (cur ? 1 : 0), 0)
-  }, [questions, answers])
 
   const resetQuestions = React.useCallback(async () => {
     try {

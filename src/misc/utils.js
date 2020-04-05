@@ -18,3 +18,8 @@ export const replaceItemInArray = (item, index, array) => [
   item,
   ...array.slice(index + 1),
 ]
+
+export const getScores = (questions, answers) =>
+  questions
+    .map((q, i) => getCorrectAnswer(q) === answers[i])
+    .reduce((acc, cur) => acc + (cur ? 1 : 0), 0)
